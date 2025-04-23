@@ -1,0 +1,35 @@
+name: Levanter WhatsApp Bot
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Runs every 6 hours
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Allows manual runs
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+    - name: Install Dependencies
+      run: npm install
+    - name: Create config.env
+      run: |
+        echo "SESSION_ID=${{ secrets.SESSION_ID }}" > config.env
+        echo "PREFIX=." >> config.env
+        echo "SUDO=2348167893138" >> config.env
+        echo "TIMEZONE=Asia/Kolkata" >> config.env
+        echo "VPS=true" >> config.env
+        echo "AUTO_STATUS_VIEW=true" >> config.env
+        echo "SEND_READ=true" >> config.env
+        echo "AJOIN=true" >> config.env
+        echo "DISABLE_START_MESSAGE=false" >> config.env
+        echo "BOT_LANG=english" >> config.env
+    - name: Start Bot
+      run: npm start
